@@ -12,6 +12,16 @@ namespace CarvedRock.Api.GraphQL
                 "products", //nazov fieldu , vyuzitelne pri definovany query
                 resolve: context => productRepository.GetAll() //definuje ako maju byt data resolvovane --> GetAll() vracia Task ktory nie je potrebne await, riesenie GraphQL (nuget) sa o toto postara
             );
+
+            Field<ProductType>(
+                "product",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IdGraphType>> { Name = "id"}), //custom argument pre ziskanie konkretneho zaznamu
+                resolve: context =>
+                {
+                    var id = context.GetArgument<int>("id");
+                    return productRepository.GetOne(id);
+                }
+            );
         }
     }
 }

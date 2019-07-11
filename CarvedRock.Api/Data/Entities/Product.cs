@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,5 +22,6 @@ namespace CarvedRock.Api.Data.Entities
 
         [StringLength(100)]
         public string PhotoFileName { get; set; }
+        public List<ProductReview> ProductReviews { get; set; }
     }
 }
