@@ -9,8 +9,8 @@ namespace CarvedRock.Api.GraphQL
         public CarvedRockQuery(ProductRepository productRepository)
         {
             Field<ListGraphType<ProductType>>(
-                "products", 
-                resolve: context => productRepository.GetAll()
+                "products", //nazov fieldu , vyuzitelne pri definovany query
+                resolve: context => productRepository.GetAll() //definuje ako maju byt data resolvovane --> GetAll() vracia Task ktory nie je potrebne await, riesenie GraphQL (nuget) sa o toto postara
             );
         }
     }

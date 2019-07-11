@@ -3,7 +3,7 @@ using GraphQL.Types;
 
 namespace CarvedRock.Api.GraphQL.Types
 {
-    public class ProductType: ObjectGraphType<Product>
+    public class ProductType: ObjectGraphType<Product> //vytvorenie Graph type pre entitu
     {
         public ProductType()
         {
