@@ -2,6 +2,7 @@
 using CarvedRock.Web.Models;
 using GraphQL.Client;
 using GraphQL.Common.Request;
+using GraphQL.Common.Response;
 using Newtonsoft.Json;
 
 namespace CarvedRock.Web.Clients
@@ -16,7 +17,7 @@ namespace CarvedRock.Web.Clients
             _client = client;
         }
 
-        public async Task<ProductModel> GetProduct(int id)
+        public async Task<ProductModel> GetProduct(int id) //dopytovanie pouzitim GraphQL API
         {
             var query = new GraphQLRequest
             {
@@ -33,7 +34,7 @@ namespace CarvedRock.Web.Clients
             return response.GetDataFieldAs<ProductModel>("product"); //product reprezentuje root node odpovede 
         }
 
-        public async Task<ProductReviewModel> AddReview(ProductReviewInputModel review)
+        public async Task<ProductReviewModel> AddReview(ProductReviewInputModel review) //vytvaranie itemov pouzitim GraphQL API
         {
             var query = new GraphQLRequest
             {
@@ -49,6 +50,17 @@ namespace CarvedRock.Web.Clients
             };
             var response = await _client.PostAsync(query);
             return response.GetDataFieldAs<ProductReviewModel>("createReview");
+        }
+
+        public async Task SubscribeToUpdates()
+        {
+            var result = await _client.SendSubscribeAsync("subscription { reviewAdded { title productId } }");
+            result.OnReceive += Receive;
+        }
+
+        private void Receive(GraphQLResponse resp)
+        {
+            var review = resp.Data["reviewAdded"];
         }
     }
 }
