@@ -45,10 +45,14 @@ namespace CarvedRock.Api
                 .AddUserContextBuilder(httpContext => httpContext.User) //poskytnutie User contextu --> ak je user context potrebny v nejakom graph type, tato lambda expresion je vykonana
                 .AddGraphTypes(ServiceLifetime.Scoped) //pre ziskanie vsetkych GraphTypes (scanuje assembly)
                 .AddDataLoader(); //umoznuje pridana Data loaderu
+
+            services.AddCors(); 
         }
 
         public void Configure(IApplicationBuilder app, CarvedRockDbContext dbContext)
         {
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()); //povolenie any origin, neaplikovat na produkcii
+
             app.UseGraphQL<CarvedRockSchema>(); //pridanie GraphQL middlewaru --> ako parameter je mozne uviest ENDPOINT, ak nie je uvedeny tak bude /graphql
             app.UseGraphQLPlayground(new GraphQLPlaygroundOptions()); //middleware pre GraphQL playground, options defaultne definuju playgroud dostupne na /ui/playground  a je ocakavane, ze GraphQL je na endpointe /graphql (default pre GraphQL middleware)
             dbContext.Seed();
